@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:fitsSystemWindows="true"
-    tools:context=".DetailActivity">
+    tools:context=".ui.DetailActivity">
 
 
     <ImageView

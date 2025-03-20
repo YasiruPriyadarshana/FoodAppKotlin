@@ -1,4 +1,4 @@
-package com.example.foodapp
+package com.example.foodapp.adapter
 
 import android.content.Context
 import android.content.Intent
@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foodapp.ui.DetailActivity
+import com.example.foodapp.model.FoodItem
+import com.example.foodapp.R
 
 class FoodAdapter(private val context: Context, private val foodList: List<FoodItem>) :
     RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {

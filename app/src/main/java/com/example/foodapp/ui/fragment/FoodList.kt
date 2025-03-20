@@ -1,4 +1,4 @@
-package com.example.foodapp
+package com.example.foodapp.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.foodapp.R
+import com.example.foodapp.adapter.FoodAdapter
+import com.example.foodapp.model.FoodItem
 
 class FoodListFragment : Fragment() {
     override fun onCreateView(

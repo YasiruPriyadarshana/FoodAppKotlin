@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="8dp"
-    tools:context=".FoodItem">
+    tools:context=".model.FoodItem">
     <ImageView
         android:id="@+id/foodImageView"
         android:layout_width="match_parent"
