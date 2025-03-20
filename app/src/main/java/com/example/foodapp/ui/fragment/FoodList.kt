@@ -9,9 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.R
 import com.example.foodapp.adapter.FoodAdapter
+import com.example.foodapp.data.FoodHelper
 import com.example.foodapp.model.FoodItem
 
 class FoodListFragment : Fragment() {
+    private lateinit var foodHelper: FoodHelper
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -21,12 +24,11 @@ class FoodListFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView?.layoutManager = LinearLayoutManager(view.context)
 
-        val foodList = listOf(
-            FoodItem("Pizza \uD83C\uDF55", R.drawable.pizza,
-                "A delicious cheesy pizza with a perfectly baked crust, topped with rich tomato sauce, gooey mozzarella cheese, and a variety of fresh toppings. Whether you prefer classic pepperoni, fresh vegetables, or a meat lover’s combination, this pizza is the ultimate comfort food, packed with flavor in every bite."),
-            FoodItem("Burger \uD83C\uDF54", R.drawable.burger, "A juicy, mouthwatering beef burger grilled to perfection, served on a toasted sesame bun with crisp lettuce, ripe tomatoes, crunchy pickles, and melted cheese. Topped with a special sauce, this burger is a perfect blend of textures and flavors, making it a satisfying meal for any time of the day."),
-            FoodItem("Pasta \uD83C\uDF5D", R.drawable.pasta, "A classic Italian pasta dish made with perfectly cooked al dente noodles, smothered in a rich and savory sauce. Whether it's a creamy Alfredo, a tangy marinara, or a meaty Bolognese, this dish brings the authentic taste of Italy to your plate, sprinkled with fresh herbs and grated Parmesan cheese.")
-        )
+
+        foodHelper = FoodHelper(requireContext())
+        val foodList = foodHelper.getAllFoodItems()  // Fetch data from database
+
+        recyclerView.adapter = FoodAdapter(requireContext(), foodList)
 
         recyclerView?.adapter = FoodAdapter(view.context,foodList)
 
