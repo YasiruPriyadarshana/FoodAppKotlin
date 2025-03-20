@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".FoodItem">
+    <ImageView
+        android:id="@+id/foodImageView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:contentDescription="@string/image_loading"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/foodNameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:padding="8dp"
+        android:textColor="@android:color/black"/>
+</LinearLayout>
