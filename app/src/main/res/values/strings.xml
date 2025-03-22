@@ -1,6 +1,5 @@
 <resources>
-    <string name="app_name">BasicKotlin</string>
-    <string name="btn_txt">Obapn meka</string>
+    <string name="app_name">Food APP</string>
     <string name="image_loading">Image loading</string>
     <string name="food_list">Food List</string>
     <string name="add_food">Add Food</string>
