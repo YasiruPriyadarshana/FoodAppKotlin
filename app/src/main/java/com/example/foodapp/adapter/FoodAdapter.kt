@@ -36,13 +36,12 @@ class FoodAdapter(private val context: Context, private val foodList: List<FoodI
         // Load image
         if (File(food.imagePath).exists()) {
             holder.imageView.setImageURI(Uri.fromFile(File(food.imagePath)))
-        } else {
-            holder.imageView.setImageResource(R.drawable.default_food_image) // Default image
         }
 
         // Navigate to DetailActivity when clicking the item
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("id", food.id)
             intent.putExtra("name", food.name)
             intent.putExtra("image", food.imagePath)
             intent.putExtra("description", food.description)

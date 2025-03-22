@@ -1,5 +1,6 @@
 package com.example.foodapp.ui
 
+import android.app.AlertDialog
 import android.content.ContentValues
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -8,18 +9,23 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.foodapp.R
+import com.example.foodapp.data.FoodHelper
+import java.io.File
 
 class DetailActivity : AppCompatActivity() {
+    private lateinit var foodHelper: FoodHelper
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_detail)
+        val foodId = intent.getIntExtra("id",0)
         val foodName = intent.getStringExtra("name")
         val foodImage = intent.getStringExtra("image",)
         val foodDesc = intent.getStringExtra("description")
@@ -28,14 +34,48 @@ class DetailActivity : AppCompatActivity() {
         val foodImageView = findViewById<ImageView>(R.id.foodImageView)
         val foodDescriptionTextView = findViewById<TextView>(R.id.foodDescriptionTextView)
         val downloadButton = findViewById<Button>(R.id.btnDownloadImage)
+        val deleteFoodButton = findViewById<ImageButton>(R.id.btnDeleteFood)
 
         foodNameTextView.text = foodName
-        foodImageView.setImageURI(Uri.parse(foodImage))
+
+        if (foodImage != null && File(foodImage).exists()) {
+            foodImageView.setImageURI(Uri.parse(foodImage))
+        } else {
+            foodImageView.setImageResource(R.drawable.default_food_image)
+        }
+
         foodDescriptionTextView.text = foodDesc
 
         downloadButton.setOnClickListener {
             saveImageToDownloads(foodImageView)
         }
+
+        foodHelper = FoodHelper( this)
+
+        deleteFoodButton.setOnClickListener{
+             deleteFoodItem(foodName.toString(),foodImage.toString(),foodId)
+        }
+    }
+
+    private fun deleteFoodItem(name:String,imagePath:String,id:Int){
+         AlertDialog.Builder(this)
+            .setTitle("Delete Food")
+            .setMessage("Are you sure you want to delete $name ?")
+            .setPositiveButton("Yes") { _, _ ->
+                foodHelper.deleteFood(id)
+
+                // Delete the image file if it exists
+                val imageFile = File(imagePath)
+                if (imageFile.exists()) {
+                    imageFile.delete()
+                }
+
+                Toast.makeText(this, "$name deleted", Toast.LENGTH_SHORT).show()
+                finish() // Go back to the list
+            }
+            .setNegativeButton("No", null)
+            .show()
+
     }
 
     private fun saveImageToDownloads(imageView: ImageView) {

@@ -18,6 +18,12 @@ class FoodHelper(context: Context) {
         return db.insert(DatabaseConstants.FOOD_TABLE_NAME, null, values)
     }
 
+    fun deleteFood(id: Int): Int {
+        val db = dbHelper.readableDatabase
+
+        return db.delete(DatabaseConstants.FOOD_TABLE_NAME, "${DatabaseConstants.FOOD_ID} = ?", arrayOf(id.toString()))
+    }
+
     fun getAllFoodItems(): List<FoodItem> {
         val foodList = mutableListOf<FoodItem>()
         val db = dbHelper.readableDatabase
