@@ -51,5 +51,4 @@ class FoodAdapter(private val context: Context, private val foodList: List<FoodI
 
     override fun getItemCount(): Int = foodList.size
 
-
 }
