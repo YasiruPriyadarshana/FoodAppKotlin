@@ -23,10 +23,13 @@ class FoodHelper(context: Context) {
         val values = ContentValues().apply {
             put(DatabaseConstants.FOOD_NAME, food.name)
             put(DatabaseConstants.FOOD_DESCRIPTION, food.description)
-            put(DatabaseConstants.FOOD_IMAGE_PATH, food.imagePath)
+
+            // Only update image path if it's not empty
+            if (food.imagePath.isNotEmpty()) {
+                put(DatabaseConstants.FOOD_IMAGE_PATH, food.imagePath)
+            }
         }
         db.update(DatabaseConstants.FOOD_TABLE_NAME, values, "${DatabaseConstants.FOOD_ID} = ?", arrayOf(food.id.toString()))
-        db.close()
     }
 
      fun insertFoodItem(foodItem: FoodItem) {
@@ -61,7 +64,6 @@ class FoodHelper(context: Context) {
             )
         }
         cursor.close()
-        db.close()
         return foodItem
     }
 
@@ -80,7 +82,6 @@ class FoodHelper(context: Context) {
             } while (cursor.moveToNext())
         }
         cursor.close()
-        db.close()
         return foodList
     }
 }

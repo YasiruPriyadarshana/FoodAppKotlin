@@ -42,8 +42,8 @@ class AddFoodFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_add_food, container, false)
         foodHelper = FoodHelper(requireContext())
 
-        editTextName = view.findViewById<EditText>(R.id.editTextFoodName)
-        editTextDescription = view.findViewById<EditText>(R.id.editTextDescription)
+        editTextName = view.findViewById(R.id.editTextFoodName)
+        editTextDescription = view.findViewById(R.id.editTextDescription)
         imageView = view.findViewById(R.id.imageViewFood)
         val buttonPickImage = view.findViewById<Button>(R.id.buttonPickImage)
         val buttonAddFood = view.findViewById<Button>(R.id.buttonAddFood)
@@ -77,7 +77,7 @@ class AddFoodFragment : Fragment() {
         val description = editTextDescription.text.toString()
 
         if (name.isNotEmpty() && description.isNotEmpty()) {
-            val imagePath = saveImageToMediaFolder(imageUri)
+            val imagePath = if (imageUri != null) saveImageToMediaFolder(imageUri) else ""
             val foodItem = FoodItem(id=foodId,name = name, description = description, imagePath = imagePath)
             foodHelper.insertFoodItem(foodItem)
             Toast.makeText(requireContext(), "Food added!", Toast.LENGTH_SHORT).show()
