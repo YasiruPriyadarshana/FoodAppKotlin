@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.foodapp.ui.DetailActivity
+import com.example.foodapp.ui.view.activity.DetailActivity
 import com.example.foodapp.model.FoodItem
 import com.example.foodapp.R
 import java.io.File
 
-class FoodAdapter(private val context: Context, private val foodList: List<FoodItem>) :
+class FoodAdapter(private val context: Context, private val foodList: MutableList<FoodItem>) :
     RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -38,7 +38,6 @@ class FoodAdapter(private val context: Context, private val foodList: List<FoodI
             holder.imageView.setImageURI(Uri.fromFile(File(food.imagePath)))
         }
 
-        // Navigate to DetailActivity when clicking the item
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("id", food.id)
@@ -50,5 +49,11 @@ class FoodAdapter(private val context: Context, private val foodList: List<FoodI
     }
 
     override fun getItemCount(): Int = foodList.size
+
+    fun updateData(newFoodList: List<FoodItem>) {
+        foodList.clear()
+        foodList.addAll(newFoodList)
+        notifyDataSetChanged()
+    }
 
 }

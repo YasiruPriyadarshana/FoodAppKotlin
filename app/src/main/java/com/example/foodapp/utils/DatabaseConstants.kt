@@ -1,4 +1,4 @@
-package com.example.foodapp.data
+package com.example.foodapp.utils
 
 object DatabaseConstants {
     const val DATABASE_NAME = "app_database.db"

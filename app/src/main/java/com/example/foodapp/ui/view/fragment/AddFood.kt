@@ -1,4 +1,4 @@
-package com.example.foodapp.ui.fragment
+package com.example.foodapp.ui.view.fragment
 
 import android.net.Uri
 import android.os.Bundle
@@ -13,7 +13,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.foodapp.R
-import com.example.foodapp.data.FoodHelper
+import com.example.foodapp.data.sqlite.FoodHelper
 import com.example.foodapp.model.FoodItem
 import java.io.File
 import java.io.FileOutputStream

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.fragment.AddFoodFragment" >
+    tools:context=".ui.view.fragment.AddFoodFragment" >
     <EditText
         android:id="@+id/editTextFoodName"
         android:layout_width="match_parent"

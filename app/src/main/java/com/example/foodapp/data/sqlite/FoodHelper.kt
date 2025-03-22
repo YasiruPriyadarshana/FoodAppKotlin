@@ -1,7 +1,8 @@
-package com.example.foodapp.data
+package com.example.foodapp.data.sqlite
 
 import android.content.ContentValues
 import android.content.Context
+import com.example.foodapp.utils.DatabaseConstants
 import com.example.foodapp.model.FoodItem
 
 

@@ -1,4 +1,4 @@
-package com.example.foodapp.ui
+package com.example.foodapp.ui.view.activity
 
 import android.app.AlertDialog
 import android.content.ContentValues
@@ -18,7 +18,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.foodapp.R
-import com.example.foodapp.data.FoodHelper
+import com.example.foodapp.data.sqlite.FoodHelper
 import java.io.File
 
 class DetailActivity : AppCompatActivity() {

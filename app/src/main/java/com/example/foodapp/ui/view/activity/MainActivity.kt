@@ -1,10 +1,10 @@
-package com.example.foodapp.ui
+package com.example.foodapp.ui.view.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.foodapp.ui.fragment.AddFoodFragment
-import com.example.foodapp.ui.fragment.FoodListFragment
+import com.example.foodapp.ui.view.fragment.AddFoodFragment
+import com.example.foodapp.ui.view.fragment.FoodListFragment
 import com.example.foodapp.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

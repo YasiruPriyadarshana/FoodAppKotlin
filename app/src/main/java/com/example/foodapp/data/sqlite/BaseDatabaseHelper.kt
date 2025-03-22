@@ -1,11 +1,15 @@
-package com.example.foodapp.data
+package com.example.foodapp.data.sqlite
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.example.foodapp.utils.DatabaseConstants
 
 class BaseDatabaseHelper private constructor(context: Context) :
-    SQLiteOpenHelper(context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION) {
+    SQLiteOpenHelper(context,
+        DatabaseConstants.DATABASE_NAME, null,
+        DatabaseConstants.DATABASE_VERSION
+    ) {
 
     companion object {
 
