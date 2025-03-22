@@ -22,11 +22,10 @@ import java.io.IOException
 class AddFoodFragment : Fragment() {
     private lateinit var foodHelper: FoodHelper
     private lateinit var imageView: ImageView
+    private lateinit var editTextName: EditText
+    private lateinit var editTextDescription: EditText
     private var imageUri: Uri? = null
 
-    companion object {
-        private const val PICK_IMAGE_REQUEST = 1
-    }
     private val imagePickerLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
@@ -43,27 +42,48 @@ class AddFoodFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_add_food, container, false)
         foodHelper = FoodHelper(requireContext())
 
-        val editTextName = view.findViewById<EditText>(R.id.editTextFoodName)
-        val editTextDescription = view.findViewById<EditText>(R.id.editTextDescription)
+        editTextName = view.findViewById<EditText>(R.id.editTextFoodName)
+        editTextDescription = view.findViewById<EditText>(R.id.editTextDescription)
         imageView = view.findViewById(R.id.imageViewFood)
         val buttonPickImage = view.findViewById<Button>(R.id.buttonPickImage)
         val buttonAddFood = view.findViewById<Button>(R.id.buttonAddFood)
 
-        buttonPickImage.setOnClickListener { pickImage() }
-        buttonAddFood.setOnClickListener {
-            val name = editTextName.text.toString()
-            val description = editTextDescription.text.toString()
+        val foodId = arguments?.getInt("food_id", -1) ?: -1
 
-            if (name.isNotEmpty() && description.isNotEmpty()) {
-                val imagePath = saveImageToMediaFolder(imageUri)
-                val foodItem = FoodItem(name = name, description = description, imagePath = imagePath)
-                foodHelper.insertFood(foodItem)
-                Toast.makeText(requireContext(), "Food added!", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(requireContext(), "Please fill all fields!", Toast.LENGTH_SHORT).show()
+        if (foodId != -1) {
+            val food = foodHelper.getFoodItemById(foodId)
+            food?.let {
+                editTextName.setText(it.name)
+                editTextDescription.setText(it.description)
+                val imagePath = it.imagePath
+
+                if (File(imagePath).exists()) {
+                    imageView.setImageURI(Uri.fromFile(File(imagePath)))
+                } else {
+                    imageView.setImageResource(R.drawable.default_food_image)
+                }
             }
         }
+
+        buttonPickImage.setOnClickListener { pickImage() }
+        buttonAddFood.setOnClickListener {
+            saveFood(foodId)
+        }
         return view
+    }
+
+    private  fun saveFood(foodId:Int){
+        val name = editTextName.text.toString()
+        val description = editTextDescription.text.toString()
+
+        if (name.isNotEmpty() && description.isNotEmpty()) {
+            val imagePath = saveImageToMediaFolder(imageUri)
+            val foodItem = FoodItem(id=foodId,name = name, description = description, imagePath = imagePath)
+            foodHelper.insertFoodItem(foodItem)
+            Toast.makeText(requireContext(), "Food added!", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(requireContext(), "Please fill all fields!", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun pickImage() {

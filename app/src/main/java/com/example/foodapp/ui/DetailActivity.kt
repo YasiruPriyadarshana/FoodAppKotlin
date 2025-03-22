@@ -2,6 +2,7 @@ package com.example.foodapp.ui
 
 import android.app.AlertDialog
 import android.content.ContentValues
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
@@ -35,6 +36,8 @@ class DetailActivity : AppCompatActivity() {
         val foodDescriptionTextView = findViewById<TextView>(R.id.foodDescriptionTextView)
         val downloadButton = findViewById<Button>(R.id.btnDownloadImage)
         val deleteFoodButton = findViewById<ImageButton>(R.id.btnDeleteFood)
+        val editFoodButton = findViewById<ImageButton>(R.id.btnEditFood)
+
 
         foodNameTextView.text = foodName
 
@@ -54,6 +57,13 @@ class DetailActivity : AppCompatActivity() {
 
         deleteFoodButton.setOnClickListener{
              deleteFoodItem(foodName.toString(),foodImage.toString(),foodId)
+        }
+
+        editFoodButton.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            intent.putExtra("food_id",foodId)
+            startActivity(intent)
+            finish()
         }
     }
 

@@ -11,4 +11,5 @@
     <string name="enter_food_description">Enter food description</string>
     <string name="pick_image">Pick Image</string>
     <string name="delete_food">Delete Food</string>
+    <string name="edit_food">Edit Food</string>
 </resources>

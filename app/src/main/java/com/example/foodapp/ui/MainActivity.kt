@@ -6,8 +6,6 @@ import androidx.fragment.app.Fragment
 import com.example.foodapp.ui.fragment.AddFoodFragment
 import com.example.foodapp.ui.fragment.FoodListFragment
 import com.example.foodapp.R
-import com.example.foodapp.data.FoodHelper
-import com.example.foodapp.model.FoodItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
@@ -37,6 +35,19 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_add -> loadFragment(AddFoodFragment())
             }
             true
+        }
+
+        val foodId = intent.getIntExtra("food_id", -1)
+
+        if(foodId!= -1){
+            val fragment = AddFoodFragment().apply {
+                arguments = Bundle().apply { putInt("food_id", foodId) }
+            }
+
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
         }
 
     }

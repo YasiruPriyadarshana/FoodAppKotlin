@@ -49,4 +49,15 @@
         android:minWidth="48dp"
         android:minHeight="48dp"
         app:tint="@color/red" />
+
+    <ImageButton
+        android:id="@+id/btnEditFood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/edit_food"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        app:tint="@color/blue" />
 </LinearLayout>
