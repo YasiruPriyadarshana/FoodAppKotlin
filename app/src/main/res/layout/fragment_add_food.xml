@@ -6,15 +6,37 @@
     android:orientation="vertical"
     tools:context=".ui.fragment.AddFoodFragment" >
     <EditText
-        android:id="@+id/foodNameEditText"
+        android:id="@+id/editTextFoodName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
         android:hint="@string/enter_food_name"
         android:inputType="text" />
 
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:hint="@string/enter_food_description"
+        android:inputType="text" />
+
+    <ImageView
+        android:id="@+id/imageViewFood"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:contentDescription="@string/image_loading"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_food_image" />
+
     <Button
-        android:id="@+id/addFoodButton"
+        android:id="@+id/buttonPickImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/pick_image" />
+
+    <Button
+        android:id="@+id/buttonAddFood"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_food" />

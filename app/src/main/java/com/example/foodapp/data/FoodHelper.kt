@@ -8,29 +8,28 @@ import com.example.foodapp.model.FoodItem
 class FoodHelper(context: Context) {
     private val dbHelper = BaseDatabaseHelper.getInstance(context)
 
-    fun insertFood(foodItem: FoodItem) {
-        val db = dbHelper.writableDatabase
+    fun insertFood(foodItem: FoodItem): Long {
+        val db = dbHelper.readableDatabase
         val values = ContentValues().apply {
-            put("name", foodItem.name)
-            put("image", foodItem.imageResId)
-            put("description", foodItem.description)
+            put(DatabaseConstants.FOOD_NAME, foodItem.name)
+            put(DatabaseConstants.FOOD_DESCRIPTION, foodItem.description)
+            put(DatabaseConstants.FOOD_IMAGE_PATH, foodItem.imagePath)
         }
-        db.insert("food_items", null, values)
-        db.close()
+        return db.insert(DatabaseConstants.FOOD_TABLE_NAME, null, values)
     }
 
     fun getAllFoodItems(): List<FoodItem> {
         val foodList = mutableListOf<FoodItem>()
         val db = dbHelper.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM food_items", null)
+        val cursor = db.rawQuery("SELECT * FROM ${DatabaseConstants.FOOD_TABLE_NAME}", null)
 
         if (cursor.moveToFirst()) {
             do {
-                val id = cursor.getInt(cursor.getColumnIndexOrThrow("id"))
-                val name = cursor.getString(cursor.getColumnIndexOrThrow("name"))
-                val image = cursor.getInt(cursor.getColumnIndexOrThrow("image"))
-                val description = cursor.getString(cursor.getColumnIndexOrThrow("description"))
-                foodList.add(FoodItem(id, name, image, description))
+                val id = cursor.getInt(cursor.getColumnIndexOrThrow(DatabaseConstants.FOOD_ID))
+                val name = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseConstants.FOOD_NAME))
+                val imagePath = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseConstants.FOOD_IMAGE_PATH))
+                val description = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseConstants.FOOD_DESCRIPTION))
+                foodList.add(FoodItem(id, name, description, imagePath))
             } while (cursor.moveToNext())
         }
         cursor.close()

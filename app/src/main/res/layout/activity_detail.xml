@@ -17,6 +17,12 @@
         android:contentDescription="@string/image_loading"
         android:scaleType="centerCrop" />
 
+    <Button
+        android:id="@+id/btnDownloadImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/download_image"/>
+
     <TextView
         android:id="@+id/foodNameTextView"
         android:layout_width="match_parent"

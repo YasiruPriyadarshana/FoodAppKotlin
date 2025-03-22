@@ -7,4 +7,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="enter_food_name">Enter Food Name</string>
+    <string name="download_image">Download Image</string>
+    <string name="enter_food_description">Enter food description</string>
+    <string name="pick_image">Pick Image</string>
 </resources>

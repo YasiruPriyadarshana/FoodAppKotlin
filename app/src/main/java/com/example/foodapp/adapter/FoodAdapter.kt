@@ -2,6 +2,7 @@ package com.example.foodapp.adapter
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,13 +12,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.ui.DetailActivity
 import com.example.foodapp.model.FoodItem
 import com.example.foodapp.R
+import java.io.File
 
 class FoodAdapter(private val context: Context, private val foodList: List<FoodItem>) :
     RecyclerView.Adapter<FoodAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val foodImage: ImageView = view.findViewById(R.id.foodImageView)
-        val foodName: TextView = view.findViewById(R.id.foodNameTextView)
+        val name: TextView = view.findViewById(R.id.textViewFoodName)
+        val description: TextView = view.findViewById(R.id.textViewFoodDescription)
+        val imageView: ImageView = view.findViewById(R.id.imageViewFood)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FoodViewHolder {
@@ -27,22 +30,27 @@ class FoodAdapter(private val context: Context, private val foodList: List<FoodI
 
     override fun onBindViewHolder(holder: FoodViewHolder, position: Int) {
         val food = foodList[position]
-        holder.foodImage.setImageResource(food.imageResId)
-        holder.foodName.text = food.name
+        holder.name.text = food.name
+        holder.description.text = food.description
+
+        // Load image
+        if (File(food.imagePath).exists()) {
+            holder.imageView.setImageURI(Uri.fromFile(File(food.imagePath)))
+        } else {
+            holder.imageView.setImageResource(R.drawable.default_food_image) // Default image
+        }
 
         // Navigate to DetailActivity when clicking the item
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("name", food.name)
-            intent.putExtra("image", food.imageResId)
+            intent.putExtra("image", food.imagePath)
             intent.putExtra("description", food.description)
             context.startActivity(intent)
         }
     }
 
-    override fun getItemCount(): Int {
-      return foodList.count()
-    }
+    override fun getItemCount(): Int = foodList.size
 
 
 }

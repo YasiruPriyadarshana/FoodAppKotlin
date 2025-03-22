@@ -5,17 +5,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
 class BaseDatabaseHelper private constructor(context: Context) :
-    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+    SQLiteOpenHelper(context, DatabaseConstants.DATABASE_NAME, null, DatabaseConstants.DATABASE_VERSION) {
 
     companion object {
-        private const val DATABASE_NAME = "app_database.db"
-        private const val DATABASE_VERSION = 1
-
-        private const val TABLE_FOOD = "food_items"
-        private const val COLUMN_ID = "id"
-        private const val COLUMN_NAME = "name"
-        private const val COLUMN_IMAGE = "image"
-        private const val COLUMN_DESCRIPTION = "description"
 
         @Volatile
         private var instance: BaseDatabaseHelper? = null
@@ -29,11 +21,11 @@ class BaseDatabaseHelper private constructor(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase) {
         val createFoodTable = """
-            CREATE TABLE $TABLE_FOOD (
-                $COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT,
-                $COLUMN_NAME TEXT,
-                $COLUMN_IMAGE INTEGER,
-                $COLUMN_DESCRIPTION TEXT
+            CREATE TABLE ${DatabaseConstants.FOOD_TABLE_NAME} (
+                ${DatabaseConstants.FOOD_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                ${DatabaseConstants.FOOD_NAME} TEXT,
+                ${DatabaseConstants.FOOD_DESCRIPTION} TEXT,
+                ${DatabaseConstants.FOOD_IMAGE_PATH} TEXT
             )
         """.trimIndent()
 
@@ -43,7 +35,7 @@ class BaseDatabaseHelper private constructor(context: Context) :
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        db.execSQL("DROP TABLE IF EXISTS $TABLE_FOOD")
+        db.execSQL("DROP TABLE IF EXISTS ${DatabaseConstants.FOOD_TABLE_NAME}")
         onCreate(db)
     }
 }

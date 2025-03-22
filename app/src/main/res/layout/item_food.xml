@@ -8,17 +8,27 @@
     android:padding="8dp"
     tools:context=".model.FoodItem">
     <ImageView
-        android:id="@+id/foodImageView"
+        android:id="@+id/imageViewFood"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:contentDescription="@string/image_loading"
         android:scaleType="centerCrop" />
 
     <TextView
-        android:id="@+id/foodNameTextView"
+        android:id="@+id/textViewFoodName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:padding="8dp"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/textViewFoodDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:padding="8dp"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/black"
+        android:maxLines="1"
+        android:ellipsize="end" />
 </LinearLayout>
