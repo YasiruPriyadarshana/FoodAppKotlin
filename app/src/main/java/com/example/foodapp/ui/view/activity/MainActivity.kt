@@ -37,11 +37,11 @@ class MainActivity : AppCompatActivity() {
             true
         }
 
-        val foodId = intent.getIntExtra("food_id", -1)
+        val foodId = intent.getStringExtra("firestoreId") ?: ""
 
-        if(foodId!= -1){
+        if(foodId.isNotEmpty()){
             val fragment = AddFoodFragment().apply {
-                arguments = Bundle().apply { putInt("food_id", foodId) }
+                arguments = Bundle().apply { putString("firestoreId", foodId) }
             }
 
             supportFragmentManager.beginTransaction()

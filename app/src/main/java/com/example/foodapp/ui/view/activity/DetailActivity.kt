@@ -17,16 +17,26 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
 import com.example.foodapp.R
+import com.example.foodapp.data.remote.FoodRemoteService
+import com.example.foodapp.data.repository.FoodRepository
 import com.example.foodapp.data.sqlite.FoodHelper
+import com.example.foodapp.ui.viewmodel.FoodViewModel
+import com.example.foodapp.ui.viewmodel.ViewModelFactory
 import java.io.File
 
 class DetailActivity : AppCompatActivity() {
     private lateinit var foodHelper: FoodHelper
+    private lateinit var viewModel: FoodViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_detail)
+
+        val repository = FoodRepository(FoodHelper(this), FoodRemoteService(), this)
+        viewModel = ViewModelProvider(this, ViewModelFactory(repository))[FoodViewModel::class.java]
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -81,13 +91,18 @@ class DetailActivity : AppCompatActivity() {
             .setTitle("Delete Food")
             .setMessage("Are you sure you want to delete $name?")
             .setPositiveButton("Yes") { _, _ ->
-                foodHelper.deleteFood(firestoreId)  // Delete using Firestore ID
+                viewModel.deleteFood(firestoreId) { success ->
+                    if (success) {
+                        // Delete the image file if it exists
+                        val imageFile = File(imagePath)
+                        if (imageFile.exists()) imageFile.delete()
 
-                val imageFile = File(imagePath)
-                if (imageFile.exists()) imageFile.delete()
-
-                Toast.makeText(this, "$name deleted", Toast.LENGTH_SHORT).show()
-                finish()
+                        Toast.makeText(this, "$name deleted", Toast.LENGTH_SHORT).show()
+                        finish()
+                    } else {
+                        Toast.makeText(this, "Failed to delete $name!", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
             .setNegativeButton("No", null)
             .show()

@@ -55,7 +55,22 @@ class AddFoodFragment : Fragment() {
         val buttonPickImage = view.findViewById<Button>(R.id.buttonPickImage)
         val buttonAddFood = view.findViewById<Button>(R.id.buttonAddFood)
 
+        val foodId = arguments?.getString("firestoreId", "") ?: ""
 
+        if (foodId.isNotEmpty()) {
+            val food = viewModel.getFoodItemByFireStoreId(foodId)  // Fetch from ViewModel
+            food?.let {
+                editTextName.setText(it.name)
+                editTextDescription.setText(it.description)
+                val imagePath = it.imagePath
+
+                if (File(imagePath).exists()) {
+                    imageView.setImageURI(Uri.fromFile(File(imagePath)))
+                } else {
+                    imageView.setImageResource(R.drawable.default_food_image)
+                }
+            }
+        }
 
         buttonPickImage.setOnClickListener { pickImage() }
         buttonAddFood.setOnClickListener { saveFood() }
@@ -66,9 +81,9 @@ class AddFoodFragment : Fragment() {
     private fun saveFood() {
         val name = editTextName.text.toString()
         val description = editTextDescription.text.toString()
-        val firestoreId = arguments?.getString("firestoreId") ?: ""  // Firestore ID is required
+        val firestoreId = arguments?.getString("firestoreId") ?: ""
 
-        if (name.isNotEmpty() && description.isNotEmpty() && firestoreId.isNotEmpty()) {
+        if (name.isNotEmpty() && description.isNotEmpty()) {
             val imagePath = imageUri?.let { saveImageToMediaFolder(it) } ?: ""
 
             val existingFood = viewModel.getFoodItemByFireStoreId(firestoreId)

@@ -11,7 +11,7 @@ class FoodRemoteService() : BaseRemoteService(){
 
                 for (doc in result) {
                     val food = FoodItem(
-                        doc.getString("id")?.toIntOrNull() ?:0,
+                        doc.getLong("id")?.toInt() ?: 0,
                         doc.getString("fireStoreId") ?: "",
                         doc.getString("name") ?: "",
                         doc.getString("description") ?: "",
@@ -30,7 +30,7 @@ class FoodRemoteService() : BaseRemoteService(){
         val newId = if (foodItem.firestoreId == "") collectionRef.document().id else foodItem.firestoreId
 
         val foodData = hashMapOf(
-            "id" to  foodItem.id.toString(),
+            "id" to foodItem.id,
             "fireStoreId" to newId,
             "name" to foodItem.name,
             "description" to foodItem.description,
