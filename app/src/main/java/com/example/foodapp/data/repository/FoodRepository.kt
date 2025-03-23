@@ -21,6 +21,7 @@ class FoodRepository(
         // If offline
         if (!NetworkConnection.isConnected(context)) {
             liveData.value = foodHelper.getAllFoodItems()
+
             return liveData
         }
 
@@ -40,18 +41,23 @@ class FoodRepository(
     }
 
     fun insertFoodItem(foodItem: FoodItem, onComplete: (Boolean) -> Unit) {
-        foodHelper.insertFoodItem(foodItem)
-
         // If offline
         if (!NetworkConnection.isConnected(context)) {
+            foodHelper.insertFoodItem(foodItem)
             onComplete(true)
             return
         }
 
-        remoteService.insertFood(foodItem, onComplete)
+        remoteService.insertFood(foodItem) { success, firestoreId ->
+            if (success) {
+                val newFoodItem = foodItem.copy(firestoreId = firestoreId)
+                foodHelper.insertFoodItem(newFoodItem)
+            }
+            onComplete(success)
+        }
     }
 
-    fun deleteFood(id: Int, onComplete: (Boolean) -> Unit) {
+    fun deleteFood(id: String, onComplete: (Boolean) -> Unit) {
         foodHelper.deleteFood(id)
 
         // If offline
@@ -61,5 +67,9 @@ class FoodRepository(
         }
 
         remoteService.deleteFood(id, onComplete)
+    }
+
+    fun getFoodItemByFireStoreId(firestoreId: String): FoodItem? {
+        return foodHelper.getFoodItemByFireStoreId(firestoreId)
     }
 }

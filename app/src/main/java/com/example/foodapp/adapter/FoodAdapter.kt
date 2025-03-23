@@ -41,6 +41,7 @@ class FoodAdapter(private val context: Context, private val foodList: MutableLis
         holder.itemView.setOnClickListener {
             val intent = Intent(context, DetailActivity::class.java)
             intent.putExtra("id", food.id)
+            intent.putExtra("firestoreId", food.firestoreId)
             intent.putExtra("name", food.name)
             intent.putExtra("image", food.imagePath)
             intent.putExtra("description", food.description)

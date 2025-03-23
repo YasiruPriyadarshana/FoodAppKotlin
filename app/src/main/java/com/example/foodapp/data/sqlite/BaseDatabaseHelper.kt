@@ -27,6 +27,7 @@ class BaseDatabaseHelper private constructor(context: Context) :
         val createFoodTable = """
             CREATE TABLE ${DatabaseConstants.FOOD_TABLE_NAME} (
                 ${DatabaseConstants.FOOD_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                ${DatabaseConstants.FOOD_FIRESTORE_ID} TEXT,
                 ${DatabaseConstants.FOOD_NAME} TEXT,
                 ${DatabaseConstants.FOOD_DESCRIPTION} TEXT,
                 ${DatabaseConstants.FOOD_IMAGE_PATH} TEXT

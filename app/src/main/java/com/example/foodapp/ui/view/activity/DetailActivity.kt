@@ -35,7 +35,7 @@ class DetailActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed() // Go back to the previous screen
         }
 
-        val foodId = intent.getIntExtra("id",0)
+        val firestoreId = intent.getStringExtra("firestoreId")
         val foodName = intent.getStringExtra("name")
         val foodImage = intent.getStringExtra("image",)
         val foodDesc = intent.getStringExtra("description")
@@ -65,36 +65,32 @@ class DetailActivity : AppCompatActivity() {
         foodHelper = FoodHelper( this)
 
         deleteFoodButton.setOnClickListener{
-             deleteFoodItem(foodName.toString(),foodImage.toString(),foodId)
+             deleteFoodItem(foodName.toString(),foodImage.toString(),firestoreId?:"")
         }
 
         editFoodButton.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
-            intent.putExtra("food_id",foodId)
+            intent.putExtra("firestoreId",firestoreId)
             startActivity(intent)
             finish()
         }
     }
 
-    private fun deleteFoodItem(name:String,imagePath:String,id:Int){
-         AlertDialog.Builder(this)
+    private fun deleteFoodItem(name: String, imagePath: String, firestoreId: String) {
+        AlertDialog.Builder(this)
             .setTitle("Delete Food")
-            .setMessage("Are you sure you want to delete $name ?")
+            .setMessage("Are you sure you want to delete $name?")
             .setPositiveButton("Yes") { _, _ ->
-                foodHelper.deleteFood(id)
+                foodHelper.deleteFood(firestoreId)  // Delete using Firestore ID
 
-                // Delete the image file if it exists
                 val imageFile = File(imagePath)
-                if (imageFile.exists()) {
-                    imageFile.delete()
-                }
+                if (imageFile.exists()) imageFile.delete()
 
                 Toast.makeText(this, "$name deleted", Toast.LENGTH_SHORT).show()
-                finish() // Go back to the list
+                finish()
             }
             .setNegativeButton("No", null)
             .show()
-
     }
 
     private fun saveImageToDownloads(imageView: ImageView) {

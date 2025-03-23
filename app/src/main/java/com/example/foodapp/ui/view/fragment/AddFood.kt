@@ -12,15 +12,20 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
 import com.example.foodapp.R
+import com.example.foodapp.data.remote.FoodRemoteService
+import com.example.foodapp.data.repository.FoodRepository
 import com.example.foodapp.data.sqlite.FoodHelper
 import com.example.foodapp.model.FoodItem
+import com.example.foodapp.ui.viewmodel.FoodViewModel
+import com.example.foodapp.ui.viewmodel.ViewModelFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
 class AddFoodFragment : Fragment() {
-    private lateinit var foodHelper: FoodHelper
+    private lateinit var viewModel: FoodViewModel
     private lateinit var imageView: ImageView
     private lateinit var editTextName: EditText
     private lateinit var editTextDescription: EditText
@@ -37,10 +42,12 @@ class AddFoodFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    ): View {
         val view = inflater.inflate(R.layout.fragment_add_food, container, false)
-        foodHelper = FoodHelper(requireContext())
+
+        // Initialize ViewModel
+        val repository = FoodRepository(FoodHelper(requireContext()), FoodRemoteService(), requireContext())
+        viewModel = ViewModelProvider(this, ViewModelFactory(repository))[FoodViewModel::class.java]
 
         editTextName = view.findViewById(R.id.editTextFoodName)
         editTextDescription = view.findViewById(R.id.editTextDescription)
@@ -48,46 +55,41 @@ class AddFoodFragment : Fragment() {
         val buttonPickImage = view.findViewById<Button>(R.id.buttonPickImage)
         val buttonAddFood = view.findViewById<Button>(R.id.buttonAddFood)
 
-        val foodId = arguments?.getInt("food_id", -1) ?: -1
 
-        if (foodId != -1) {
-            val food = foodHelper.getFoodItemById(foodId)
-            food?.let {
-                editTextName.setText(it.name)
-                editTextDescription.setText(it.description)
-                val imagePath = it.imagePath
-
-                if (File(imagePath).exists()) {
-                    imageView.setImageURI(Uri.fromFile(File(imagePath)))
-                } else {
-                    imageView.setImageResource(R.drawable.default_food_image)
-                }
-            }
-        }
 
         buttonPickImage.setOnClickListener { pickImage() }
-        buttonAddFood.setOnClickListener {
-            saveFood(foodId)
-        }
+        buttonAddFood.setOnClickListener { saveFood() }
+
         return view
     }
 
-    private  fun saveFood(foodId:Int){
+    private fun saveFood() {
         val name = editTextName.text.toString()
         val description = editTextDescription.text.toString()
+        val firestoreId = arguments?.getString("firestoreId") ?: ""  // Firestore ID is required
 
-        if (name.isNotEmpty() && description.isNotEmpty()) {
-            val imagePath = if (imageUri != null) saveImageToMediaFolder(imageUri) else ""
-            val foodItem = FoodItem(id=foodId,name = name, description = description, imagePath = imagePath)
-            foodHelper.insertFoodItem(foodItem)
-            Toast.makeText(requireContext(), "Food added!", Toast.LENGTH_SHORT).show()
+        if (name.isNotEmpty() && description.isNotEmpty() && firestoreId.isNotEmpty()) {
+            val imagePath = imageUri?.let { saveImageToMediaFolder(it) } ?: ""
+
+            val existingFood = viewModel.getFoodItemByFireStoreId(firestoreId)
+            val foodItem = FoodItem(
+                id = existingFood?.id ?: 0, // Keep existing ID if updating
+                firestoreId = firestoreId,
+                name = name,
+                description = description,
+                imagePath = imagePath.ifEmpty { existingFood?.imagePath ?: "" } // Retain old image if not changed
+            )
+
+            viewModel.insertFoodItem(foodItem) { success ->
+                Toast.makeText(requireContext(), if (success) "Food saved!" else "Failed!", Toast.LENGTH_SHORT).show()
+            }
         } else {
             Toast.makeText(requireContext(), "Please fill all fields!", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun pickImage() {
-        imagePickerLauncher.launch("image/*") // Opens gallery for image selection
+        imagePickerLauncher.launch("image/*")
     }
 
     private fun saveImageToMediaFolder(uri: Uri?): String {

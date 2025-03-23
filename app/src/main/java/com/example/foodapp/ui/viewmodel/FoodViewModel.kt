@@ -23,10 +23,14 @@ class FoodViewModel(private val repository: FoodRepository) : ViewModel() {
         }
     }
 
-    fun deleteFood(id: Int, onComplete: (Boolean) -> Unit) {
+    fun deleteFood(id: String, onComplete: (Boolean) -> Unit) {
         repository.deleteFood(id) { success ->
             if (success) loadFoodItems()
             onComplete(success)
         }
+    }
+
+    fun getFoodItemByFireStoreId(firestoreId: String): FoodItem? {
+        return repository.getFoodItemByFireStoreId(firestoreId)
     }
 }
