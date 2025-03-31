@@ -17,26 +17,20 @@ import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.ViewModelProvider
 import com.example.foodapp.R
-import com.example.foodapp.data.remote.FoodRemoteService
-import com.example.foodapp.data.repository.FoodRepository
-import com.example.foodapp.data.sqlite.FoodHelper
 import com.example.foodapp.ui.viewmodel.FoodViewModel
-import com.example.foodapp.ui.viewmodel.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import androidx.activity.viewModels
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
-    private lateinit var foodHelper: FoodHelper
-    private lateinit var viewModel: FoodViewModel
+    private val viewModel: FoodViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_detail)
-
-        val repository = FoodRepository(FoodHelper(this), FoodRemoteService(), this)
-        viewModel = ViewModelProvider(this, ViewModelFactory(repository))[FoodViewModel::class.java]
 
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -71,8 +65,6 @@ class DetailActivity : AppCompatActivity() {
         downloadButton.setOnClickListener {
             saveImageToDownloads(foodImageView)
         }
-
-        foodHelper = FoodHelper( this)
 
         deleteFoodButton.setOnClickListener{
              deleteFoodItem(foodName.toString(),foodImage.toString(),firestoreId?:"")

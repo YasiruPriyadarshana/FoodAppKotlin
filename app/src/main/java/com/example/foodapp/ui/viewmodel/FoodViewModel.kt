@@ -5,8 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.foodapp.data.repository.FoodRepository
 import com.example.foodapp.model.FoodItem
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class FoodViewModel(private val repository: FoodRepository) : ViewModel() {
+@HiltViewModel
+class FoodViewModel @Inject constructor(
+    private val repository: FoodRepository
+) : ViewModel() {
+
     private val _foodItems = MutableLiveData<List<FoodItem>>()
     val foodItems: LiveData<List<FoodItem>> get() = _foodItems
 

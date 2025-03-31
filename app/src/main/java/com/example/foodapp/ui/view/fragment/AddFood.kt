@@ -12,20 +12,18 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import com.example.foodapp.R
-import com.example.foodapp.data.remote.FoodRemoteService
-import com.example.foodapp.data.repository.FoodRepository
-import com.example.foodapp.data.sqlite.FoodHelper
 import com.example.foodapp.model.FoodItem
 import com.example.foodapp.ui.viewmodel.FoodViewModel
-import com.example.foodapp.ui.viewmodel.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+@AndroidEntryPoint
 class AddFoodFragment : Fragment() {
-    private lateinit var viewModel: FoodViewModel
+    private val viewModel: FoodViewModel by viewModels()
     private lateinit var imageView: ImageView
     private lateinit var editTextName: EditText
     private lateinit var editTextDescription: EditText
@@ -44,10 +42,6 @@ class AddFoodFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         val view = inflater.inflate(R.layout.fragment_add_food, container, false)
-
-        // Initialize ViewModel
-        val repository = FoodRepository(FoodHelper(requireContext()), FoodRemoteService(), requireContext())
-        viewModel = ViewModelProvider(this, ViewModelFactory(repository))[FoodViewModel::class.java]
 
         editTextName = view.findViewById(R.id.editTextFoodName)
         editTextDescription = view.findViewById(R.id.editTextDescription)

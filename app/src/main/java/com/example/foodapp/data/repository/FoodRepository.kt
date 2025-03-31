@@ -8,8 +8,9 @@ import com.example.foodapp.data.remote.FoodRemoteService
 import com.example.foodapp.data.sqlite.FoodHelper
 import com.example.foodapp.model.FoodItem
 import com.example.foodapp.utils.NetworkConnection
+import javax.inject.Inject
 
-class FoodRepository(
+class FoodRepository @Inject constructor(
     private val foodHelper: FoodHelper,
     private val remoteService: FoodRemoteService,
     private val context: Context

@@ -1,16 +1,14 @@
 package com.example.foodapp.data.sqlite
 
 import android.content.ContentValues
-import android.content.Context
 import com.example.foodapp.utils.DatabaseConstants
 import com.example.foodapp.model.FoodItem
+import javax.inject.Inject
 
 
-class FoodHelper(context: Context) {
-    private val dbHelper = BaseDatabaseHelper.getInstance(context)
-
+class FoodHelper @Inject constructor(private val provideDatabase: BaseDatabaseHelper) {
     private fun insertFood(foodItem: FoodItem): Long {
-        val db = dbHelper.writableDatabase  // Fix: Use writableDatabase
+        val db = provideDatabase.writableDatabase  // Fix: Use writableDatabase
         val values = ContentValues().apply {
             put(DatabaseConstants.FOOD_FIRESTORE_ID, foodItem.firestoreId) // Required
             put(DatabaseConstants.FOOD_NAME, foodItem.name)
@@ -21,7 +19,7 @@ class FoodHelper(context: Context) {
     }
 
     private fun updateFood(food: FoodItem) {
-        val db = dbHelper.readableDatabase
+        val db = provideDatabase.writableDatabase
         val values = ContentValues().apply {
             put(DatabaseConstants.FOOD_NAME, food.name)
             put(DatabaseConstants.FOOD_DESCRIPTION, food.description)
@@ -46,14 +44,14 @@ class FoodHelper(context: Context) {
     }
 
     fun deleteFood(firestoreId: String): Int {
-        val db = dbHelper.readableDatabase
+        val db = provideDatabase.writableDatabase
 
         return db.delete(DatabaseConstants.FOOD_TABLE_NAME, "${DatabaseConstants.FOOD_FIRESTORE_ID} = ?", arrayOf(firestoreId))
     }
 
     fun getFoodItemByFireStoreId(id: String): FoodItem? {
         var foodItem:FoodItem? = null
-        val db = dbHelper.readableDatabase
+        val db = provideDatabase.readableDatabase
         val cursor = db.rawQuery(
             "SELECT * FROM ${DatabaseConstants.FOOD_TABLE_NAME} WHERE ${DatabaseConstants.FOOD_FIRESTORE_ID} = ?",
             arrayOf(id)
@@ -74,7 +72,7 @@ class FoodHelper(context: Context) {
 
     fun getAllFoodItems(): List<FoodItem> {
         val foodList = mutableListOf<FoodItem>()
-        val db = dbHelper.readableDatabase
+        val db = provideDatabase.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM ${DatabaseConstants.FOOD_TABLE_NAME}", null)
 
         if (cursor.moveToFirst()) {

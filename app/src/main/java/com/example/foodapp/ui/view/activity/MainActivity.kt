@@ -6,16 +6,20 @@ import androidx.fragment.app.Fragment
 import com.example.foodapp.ui.view.fragment.AddFoodFragment
 import com.example.foodapp.ui.view.fragment.FoodListFragment
 import com.example.foodapp.R
+import com.example.foodapp.data.sqlite.FoodHelper
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    @Inject lateinit var foodHelper: FoodHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.activity_main)
 
-//        val foodHelper = FoodHelper(this)
-//
 //        if (foodHelper.getAllFoodItems().isEmpty()) {
 //            foodHelper.insertFood(FoodItem(name = "Pizza 🍕", imagePath = R.drawable.pizza, description = "A delicious cheesy pizza with a perfectly baked crust, topped with rich tomato sauce, gooey mozzarella cheese, and a variety of fresh toppings. Whether you prefer classic pepperoni, fresh vegetables, or a meat lover’s combination, this pizza is the ultimate comfort food, packed with flavor in every bite."))
 //            foodHelper.insertFood(FoodItem(name = "Burger 🍔", imagePath = R.drawable.burger, description ="A juicy, mouthwatering beef burger grilled to perfection, served on a toasted sesame bun with crisp lettuce, ripe tomatoes, crunchy pickles, and melted cheese. Topped with a special sauce, this burger is a perfect blend of textures and flavors, making it a satisfying meal for any time of the day."))

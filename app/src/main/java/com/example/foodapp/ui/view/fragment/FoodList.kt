@@ -5,20 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.foodapp.R
 import com.example.foodapp.adapter.FoodAdapter
-import com.example.foodapp.data.remote.FoodRemoteService
-import com.example.foodapp.data.repository.FoodRepository
-import com.example.foodapp.data.sqlite.FoodHelper
 import com.example.foodapp.ui.viewmodel.FoodViewModel
-import com.example.foodapp.ui.viewmodel.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FoodListFragment : Fragment() {
-    private lateinit var viewModel: FoodViewModel
+    private val viewModel: FoodViewModel by viewModels()
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var foodAdapter: FoodAdapter
 
@@ -30,10 +28,6 @@ class FoodListFragment : Fragment() {
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(view.context)
-
-        // Initialize ViewModel
-        val repository = FoodRepository(FoodHelper(requireContext()), FoodRemoteService(), requireContext())
-        viewModel = ViewModelProvider(this, ViewModelFactory(repository))[FoodViewModel::class.java]
 
         // Set up adapter
         foodAdapter = FoodAdapter(requireContext(), mutableListOf())
